@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
 
-class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
+class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
 
-    companion object{
+    companion object {
         const val VIEW_TYPE_DISABLED = 2
         const val VIEW_TYPE_ENABLED = 1
 
@@ -18,13 +18,15 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
     }
 
     var shopList = listOf<ShopItem>()
-        set(value){
-            field =value
+        set(value) {
+            field = value
             notifyDataSetChanged()
         }
+    var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
+    var onShopItemClickListener: ((ShopItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
-        val layoutItem = when(viewType){
+        val layoutItem = when (viewType) {
             VIEW_TYPE_ENABLED -> R.layout.item_shop_enabled
             VIEW_TYPE_DISABLED -> R.layout.item_shop_disabled
             else -> throw RuntimeException("Unknown view type $viewType")
@@ -41,22 +43,31 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
         val shopItem = shopList[position]
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
-        holder.view.setOnLongClickListener{
+        holder.view.setOnLongClickListener {
+            onShopItemLongClickListener?.invoke(shopItem)
             true
+        }
+        holder.view.setOnClickListener {
+            onShopItemClickListener?.invoke(shopItem)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val shopItem = shopList[position]
-        if (shopItem.enabled){
+        if (shopItem.enabled) {
             return VIEW_TYPE_ENABLED
         } else {
             return VIEW_TYPE_DISABLED
         }
     }
 
-    class ShopItemViewHolder(val view: View): RecyclerView.ViewHolder(view){
+    class ShopItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val tvCount = view.findViewById<TextView>(R.id.tv_count)
+    }
+
+    interface OnShopItemLongClickListener{
+
+        fun onShopItemLongClick(shopItem: ShopItem)
     }
 }
