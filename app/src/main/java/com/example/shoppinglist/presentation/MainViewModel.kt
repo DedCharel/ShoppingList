@@ -1,5 +1,7 @@
 package com.example.shoppinglist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shoppinglist.data.ShopListRepositoryImpl
@@ -9,12 +11,12 @@ import com.example.shoppinglist.domain.GetShopItemUseCase
 import com.example.shoppinglist.domain.GetShopListUseCase
 import com.example.shoppinglist.domain.ShopItem
 
-class MainViewModel: ViewModel() {
+class MainViewModel(application: Application): AndroidViewModel(application) {
 
 
     //Временная реализация. Слой presentation не должен знать ничего о  data слое.
     // Repository нужно делать через инъекцию зависимостей.
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
 
     private val getShopListUseCase = GetShopListUseCase(repository)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(repository)

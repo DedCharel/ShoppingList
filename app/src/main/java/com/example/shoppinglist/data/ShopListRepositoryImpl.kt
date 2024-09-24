@@ -41,7 +41,6 @@ class ShopListRepositoryImpl(
     = shopListDao.getShopList().map {
         mapper.mapListDbModelToListEntity(it)
     }
-    }
 
 
 }
