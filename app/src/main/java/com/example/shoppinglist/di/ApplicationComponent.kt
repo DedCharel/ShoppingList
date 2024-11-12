@@ -8,6 +8,7 @@ import com.example.shoppinglist.presentation.ShoppListApp
 import dagger.BindsInstance
 import dagger.Component
 
+@ApplicationScope
 @Component(modules = [DataModule::class, ViewModuleModel::class])
 interface ApplicationComponent {
 
