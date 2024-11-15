@@ -1,5 +1,6 @@
 package com.example.shoppinglist.presentation
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +46,14 @@ class MainActivity : AppCompatActivity(),ShopItemFragment.OnEditingFinishListene
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
         }
+
+        contentResolver.query(
+            Uri.parse("content://com.example.shoppinglist/shop_item"),
+            null,
+            null,
+            null,
+            null
+        )
     }
 
     private fun isOnePaneMode(): Boolean {
