@@ -2,23 +2,35 @@ package com.example.shoppinglist.data
 
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 
 class ShopListProvider: ContentProvider() {
+
+    private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
+        addURI("com.example.shoppinglist", "shop_item", GET_SHOP_ITEMS_QUERY)
+        addURI("com.example.shoppinglist", "shop_item/#", GET_SHOP_ITEM_BY_ID_QUERY)
+    }
+
     override fun onCreate(): Boolean {
         return true
     }
 
     override fun query(
-        url: Uri,
+        uri: Uri,
         projection: Array<out String>?,
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor? {
-        Log.d("ShopListProvider", "query $url")
+        val code = uriMatcher.match(uri)
+        when (code){
+            GET_SHOP_ITEMS_QUERY -> {}
+            GET_SHOP_ITEM_BY_ID_QUERY ->{ }
+        }
+        Log.d("ShopListProvider", "query $uri code $code")
         return null
     }
 
@@ -36,5 +48,10 @@ class ShopListProvider: ContentProvider() {
 
     override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        const val GET_SHOP_ITEMS_QUERY = 100
+        const val GET_SHOP_ITEM_BY_ID_QUERY = 101
     }
 }
